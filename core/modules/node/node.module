@@ -3092,7 +3092,10 @@ function _node_query_node_access_alter($query, $type) {
       }
       // Otherwise attach it to the node query itself.
       else {
-        $query->exists($subquery);
+        $node_access_conditions = db_or()
+          ->isNull("$node_alias.$field")
+          ->exists($subquery);
+        $query->condition($node_access_conditions);
       }
     }
   }
